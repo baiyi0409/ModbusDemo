@@ -80,8 +80,9 @@
                 Margin="30"
                 Columns="3"
                 Rows="2">
-                <StackPanel Margin="0,0,10,10">
+                <DockPanel Margin="0,0,10,10">
                     <TextBlock
+                        DockPanel.Dock="Top"
                         FontFamily="微软雅黑"
                         FontSize="24"
                         FontWeight="Bold"
@@ -97,6 +98,7 @@
                             DeviceType="灯光"
                             DeviceValue="{Binding MainLight}"
                             Icon="{DynamicResource Lighting}"
+                            Command="{Binding WriteLightingCommand}"
                             IsChecked="{Binding MainLightIsChecked}">
                             <ui:ProgressRing
                                 Width="32"
@@ -124,9 +126,10 @@
                             Icon="{DynamicResource PS5}"
                             IsChecked="{Binding PS5IsChecked}" />
                     </UniformGrid>
-                </StackPanel>
-                <StackPanel Margin="10,0,10,10">
+                </DockPanel>
+                <DockPanel Margin="10,0,10,10">
                     <TextBlock
+                        DockPanel.Dock="Top"
                         FontFamily="微软雅黑"
                         FontSize="24"
                         FontWeight="Bold"
@@ -157,9 +160,10 @@
                             DeviceType="媒体"
                             Icon="{DynamicResource Speaker}" />
                     </UniformGrid>
-                </StackPanel>
-                <StackPanel Margin="10,0,0,10">
+                </DockPanel>
+                <DockPanel Margin="10,0,0,10">
                     <TextBlock
+                        DockPanel.Dock="Top"
                         FontFamily="微软雅黑"
                         FontSize="24"
                         FontWeight="Bold"
@@ -171,61 +175,46 @@
                         Rows="2">
                         <controls:DeviceToggleButton
                             Margin="0,0,5,5"
-                            DeviceName="Belysning"
-                            DeviceType="Pa"
+                            DeviceName="床头灯(左)"
+                            DeviceType="灯光"
                             Icon="{DynamicResource BedsideLamp}" />
                         <controls:DeviceToggleButton
                             Margin="5,0,0,5"
-                            DeviceName="Belysning"
-                            DeviceType="Pa"
+                            DeviceName="床头灯(右)"
+                            DeviceType="灯光"
                             Icon="{DynamicResource BedsideLamp}" />
                         <controls:DeviceToggleButton
                             Margin="0,5,5,0"
                             DeviceName="风扇"
                             DeviceType="家居"
-                            Icon="{DynamicResource Lighting}" />
+                            Icon="{DynamicResource Fan}" />
                         <controls:DeviceToggleButton
                             Margin="5,5,0,0"
                             DeviceName="电视"
                             DeviceType="媒体"
-                            Icon="{DynamicResource Lighting}" />
+                            Icon="{DynamicResource Tv}" />
                     </UniformGrid>
-                </StackPanel>
-                <StackPanel Margin="0,10,10,0">
+                </DockPanel>
+                <DockPanel Margin="0,10,10,0">
                     <TextBlock
+                        DockPanel.Dock="Top"
                         FontFamily="微软雅黑"
                         FontSize="24"
                         FontWeight="Bold"
                         Foreground="#bcbebf"
                         Text="媒体" />
-                    <UniformGrid
+                    <Border
                         Margin="0,10,0,0"
-                        Columns="2"
-                        Rows="2">
-                        <controls:DeviceToggleButton
-                            Margin="0,0,5,5"
-                            DeviceName="Belysning"
-                            DeviceType="Pa"
-                            Icon="{DynamicResource Lighting}" />
-                        <controls:DeviceToggleButton
-                            Margin="5,0,0,5"
-                            DeviceName="Belysning"
-                            DeviceType="Pa"
-                            Icon="{DynamicResource Lighting}" />
-                        <controls:DeviceToggleButton
-                            Margin="0,5,5,0"
-                            DeviceName="Belysning"
-                            DeviceType="Pa"
-                            Icon="{DynamicResource Lighting}" />
-                        <controls:DeviceToggleButton
-                            Margin="5,5,0,0"
-                            DeviceName="Belysning"
-                            DeviceType="Pa"
-                            Icon="{DynamicResource Lighting}" />
-                    </UniformGrid>
-                </StackPanel>
-                <StackPanel Margin="10,10,10,0">
+                        Background="Transparent"
+                        ClipToBounds="True"
+                        CornerRadius="10"
+                        DockPanel.Dock="Bottom">
+                        <Image Source="{Binding MediaImage}"  Stretch="UniformToFill" />
+                    </Border>
+                </DockPanel>
+                <DockPanel Margin="10,10,10,0">
                     <TextBlock
+                        DockPanel.Dock="Top"
                         FontFamily="微软雅黑"
                         FontSize="24"
                         FontWeight="Bold"
@@ -239,26 +228,27 @@
                             Margin="0,0,5,5"
                             DeviceName="卫生间"
                             DeviceType="灯光"
-                            Icon="{DynamicResource Lighting}" />
+                            Icon="{DynamicResource Bathroom}" />
                         <controls:DeviceToggleButton
                             Margin="5,0,0,5"
                             DeviceName="厨房"
                             DeviceType="灯光"
-                            Icon="{DynamicResource Lighting}" />
+                            Icon="{DynamicResource Kitchen}" />
                         <controls:DeviceToggleButton
                             Margin="0,5,5,0"
-                            DeviceName="衣柜"
+                            DeviceName="衣帽间"
                             DeviceType="灯光"
-                            Icon="{DynamicResource Lighting}" />
+                            Icon="{DynamicResource WalkInCloset}" />
                         <controls:DeviceToggleButton
                             Margin="5,5,0,0"
                             DeviceName="大厅"
                             DeviceType="灯光"
-                            Icon="{DynamicResource Lighting}" />
+                            Icon="{DynamicResource Spotlight}" />
                     </UniformGrid>
-                </StackPanel>
-                <StackPanel Margin="10,10,0,0">
+                </DockPanel>
+                <DockPanel Margin="10,10,0,0">
                     <TextBlock
+                        DockPanel.Dock="Top"
                         FontFamily="微软雅黑"
                         FontSize="24"
                         FontWeight="Bold"
@@ -272,24 +262,24 @@
                             Margin="0,0,5,5"
                             DeviceName="温度计"
                             DeviceType="家居"
-                            Icon="{DynamicResource Lighting}" />
+                            Icon="{DynamicResource Thermometer}" />
                         <controls:DeviceToggleButton
                             Margin="5,0,0,5"
                             DeviceName="插座能耗"
                             DeviceType="家居"
-                            Icon="{DynamicResource Lighting}" />
+                            Icon="{DynamicResource EnergyConsumption}" />
                         <controls:DeviceToggleButton
                             Margin="0,5,5,0"
-                            DeviceName="Belysning"
-                            DeviceType="Pa"
-                            Icon="{DynamicResource Lighting}" />
+                            DeviceName="空调"
+                            DeviceType="家居"
+                            Icon="{DynamicResource AirConditioner}" />
                         <controls:DeviceToggleButton
                             Margin="5,5,0,0"
-                            DeviceName="Belysning"
-                            DeviceType="Pa"
-                            Icon="{DynamicResource Lighting}" />
+                            DeviceName="Yao"
+                            DeviceType="成员"
+                            Icon="{DynamicResource Man}" />
                     </UniformGrid>
-                </StackPanel>
+                </DockPanel>
             </UniformGrid>
         </Grid>
     </Grid>

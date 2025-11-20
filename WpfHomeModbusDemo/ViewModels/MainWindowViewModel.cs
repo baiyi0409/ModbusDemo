@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Wpf.Ui.Controls;
 
 namespace WpfHomeModbusDemo.ViewModels
@@ -31,6 +33,8 @@ namespace WpfHomeModbusDemo.ViewModels
             SelectedDataBits = 8;
             SelectedParity = Parity.None;
             SelectedStopBits = StopBits.One;
+            //设置默认媒体图片
+            MediaImage = new BitmapImage(new Uri("pack://application:,,,/Images/image.jpg"));
         }
 
         //串口列表
@@ -171,6 +175,22 @@ namespace WpfHomeModbusDemo.ViewModels
                 throw new InvalidOperationException("串口未打开或已断开，请检查连接！");
             }
         }
+
+        [ObservableProperty]
+        private bool mainLightIsChecked;
+        [ObservableProperty]
+        private bool deskLampIsChecked;
+        [ObservableProperty]
+        private bool tvIsChecked;
+        [ObservableProperty]
+        private bool pS5IsChecked;
+        [ObservableProperty]
+        private ImageSource mediaImage;
+
+        //主厅灯光数值
+        [ObservableProperty]
+        private string mainLight;
+
         //数据读取
         private async void StartReading()
         {
@@ -188,20 +208,6 @@ namespace WpfHomeModbusDemo.ViewModels
             }
         }
 
-        //主厅灯光是否开启
-        [ObservableProperty]
-        private bool mainLightIsChecked;
-        [ObservableProperty]
-        private bool deskLampIsChecked;
-        [ObservableProperty]
-        private bool tvIsChecked;
-        [ObservableProperty]
-        private bool pS5IsChecked;
-
-
-        //主厅灯光
-        [ObservableProperty]
-        private string mainLight;
         private void Read()
         {
             if (master == null)
@@ -245,7 +251,7 @@ namespace WpfHomeModbusDemo.ViewModels
             try
             {
                 //04
-                ushort[] register = master.ReadInputRegisters(slaveAddress, startAddress, numberOfPoints);
+                ushort[] register = master.ReadHoldingRegisters(slaveAddress, startAddress, numberOfPoints);
                 MainLight = register[0]!.ToString();
             }
             catch (Modbus.SlaveException ex)
@@ -267,31 +273,31 @@ namespace WpfHomeModbusDemo.ViewModels
             {
                 case 1:
                     uiMessageBox.Content = "异常代码 1: 非法功能码！";
-                    uiMessageBox.ShowDialogAsync(false);
+                    uiMessageBox.ShowDialogAsync();
                     break;
                 case 2:
                     uiMessageBox.Content = "异常代码 2: 非法数据地址！";
-                    uiMessageBox.ShowDialogAsync(false);
+                    uiMessageBox.ShowDialogAsync();
                     break;
                 case 3:
                     uiMessageBox.Content = "异常代码 3: 非法数据值！";
-                    uiMessageBox.ShowDialogAsync(false);
+                    uiMessageBox.ShowDialogAsync();
                     break;
                 case 4:
                     uiMessageBox.Content = "异常代码 4: 从设备故障！";
-                    uiMessageBox.ShowDialogAsync(false);
+                    uiMessageBox.ShowDialogAsync();
                     break;
                 case 5:
                     uiMessageBox.Content = "异常代码 5: 硬件故障！";
-                    uiMessageBox.ShowDialogAsync(false);
+                    uiMessageBox.ShowDialogAsync();
                     break;
                 case 6:
                     uiMessageBox.Content = "异常代码 6: 从设备忙！";
-                    uiMessageBox.ShowDialogAsync(false);
+                    uiMessageBox.ShowDialogAsync();
                     break;
                 case 7:
                     uiMessageBox.Content = "异常代码 7: 内存错误！";
-                    uiMessageBox.ShowDialogAsync(false);
+                    uiMessageBox.ShowDialogAsync();
                     break;
                 default:
                     uiMessageBox.Content = "未知异常代码: " + ex.SlaveExceptionCode;
@@ -300,6 +306,46 @@ namespace WpfHomeModbusDemo.ViewModels
             }
 
             Close();
+        }
+
+        [RelayCommand]
+        private void WriteLighting() 
+        {
+            //写入数据
+            if (master == null)
+            {
+                var uiMessageBox = new Wpf.Ui.Controls.MessageBox
+                {
+                    Title = "提示",
+                    Content = "串口未打开或已断开，请检查连接！",
+                };
+                uiMessageBox.ShowDialogAsync(false);
+                return;
+            }
+
+            byte slaveAddress = 1;
+            ushort coilAddress = 0;
+            //可能事件与IsChecked冲突，这里暂时不需要取反
+            //bool value = !MainLightIsChecked;
+            bool value = MainLightIsChecked;
+            master.WriteSingleCoil(slaveAddress, coilAddress, value);
+
+            ushort registerAddress = 0;
+            ushort valueToWrite = 0;
+
+            try
+            {
+                master.WriteSingleRegister(slaveAddress, registerAddress, valueToWrite);
+            }
+            catch (Modbus.SlaveException ex)
+            {
+                HandleModbusException(ex);
+            }
+
+
+            // 可选：写完后读回来验证
+            //ushort[] readBack = master.ReadHoldingRegisters(slaveAddress, registerAddress, 1);
+            //MainLight = readBack[0].ToString();
         }
     }
 }
