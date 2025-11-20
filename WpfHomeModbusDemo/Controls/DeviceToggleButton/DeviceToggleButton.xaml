@@ -1,0 +1,66 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:WpfHomeModbusDemo.Controls">
+    <ControlTemplate x:Key="DeviceToggleButton" TargetType="{x:Type local:DeviceToggleButton}">
+        <Border
+            x:Name="D_border"
+            Background="{TemplateBinding Background}"
+            CornerRadius="10">
+            <Grid Margin="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <!--  设备图标和状态  -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Path
+                        x:Name="IconPath"
+                        Grid.Column="0"
+                        Width="32"
+                        Height="32"
+                        Margin="10"
+                        Data="{TemplateBinding Icon}"
+                        Fill="{TemplateBinding Foreground}"
+                        Stretch="Uniform" />
+                    <ContentPresenter
+                        x:Name="D_content"
+                        Grid.Column="1"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        RecognizesAccessKey="True" />
+                </Grid>
+                <!--  设备名称和类型  -->
+                <StackPanel
+                    Grid.Row="1"
+                    Margin="0,10,0,0"
+                    VerticalAlignment="Bottom">
+                    <TextBlock
+                        FontSize="16"
+                        Foreground="#606161"
+                        Text="{TemplateBinding DeviceName}" />
+                    <TextBlock
+                        FontSize="16"
+                        Foreground="#606161"
+                        Text="{TemplateBinding DeviceType}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="IconPath" Property="Fill" Value="#26658e" />
+                <Setter TargetName="D_border" Property="Background" Value="#d5d6d7" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style TargetType="{x:Type local:DeviceToggleButton}">
+        <Setter Property="Template" Value="{StaticResource DeviceToggleButton}" />
+        <Setter Property="Background" Value="#373e41" />
+        <Setter Property="Foreground" Value="#9da0a2" />
+    </Style>
+</ResourceDictionary>

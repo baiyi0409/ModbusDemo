@@ -1,0 +1,296 @@
+﻿<Window
+    x:Class="WpfHomeModbusDemo.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:WpfHomeModbusDemo.Controls"
+    xmlns:converters="clr-namespace:WpfHomeModbusDemo.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WpfHomeModbusDemo"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:viewmodels="clr-namespace:WpfHomeModbusDemo.ViewModels"
+    Title=""
+    Width="1200"
+    Height="750"
+    d:DataContext="{d:DesignInstance viewmodels:MainWindowViewModel}"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <converters:ProgressRingVisibilityConverter x:Key="ProgressRingVisibilityConverter" />
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.25*" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Background="#111517">
+            <DockPanel
+                MinWidth="150"
+                Margin="25"
+                HorizontalAlignment="Center"
+                LastChildFill="False">
+                <StackPanel DockPanel.Dock="Top">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Foreground="White" Text="PortName" />
+                        <ComboBox
+                            Margin="0,10,0,0"
+                            ItemsSource="{Binding PortNameList}"
+                            SelectedItem="{Binding SelectedPort, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,20,0,0" Orientation="Vertical">
+                        <TextBlock Foreground="White" Text="BaudRate" />
+                        <ComboBox
+                            Margin="0,10,0,0"
+                            ItemsSource="{Binding BaudRateList}"
+                            SelectedItem="{Binding SelectedBaudRate, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,20,0,0" Orientation="Vertical">
+                        <TextBlock Foreground="White" Text="DataBits" />
+                        <ComboBox
+                            Margin="0,10,0,0"
+                            ItemsSource="{Binding DataBitsList}"
+                            SelectedItem="{Binding SelectedDataBits, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,20,0,0" Orientation="Vertical">
+                        <TextBlock Foreground="White" Text="Parity" />
+                        <ComboBox
+                            Margin="0,10,0,0"
+                            ItemsSource="{Binding ParityList}"
+                            SelectedItem="{Binding SelectedParity, Mode=TwoWay}" />
+                    </StackPanel>
+                    <StackPanel Margin="0,20,0,0" Orientation="Vertical">
+                        <TextBlock Foreground="White" Text="StopBits" />
+                        <ComboBox
+                            Margin="0,10,0,0"
+                            ItemsSource="{Binding StopBitsList}"
+                            SelectedItem="{Binding SelectedStopBits, Mode=TwoWay}" />
+                    </StackPanel>
+                    <ui:ToggleSwitch
+                        x:Name="SerialToggle"
+                        Margin="0,50,0,0"
+                        Command="{Binding ConnectCommand}"
+                        IsChecked="{Binding IsConnected, Mode=TwoWay}"
+                        OffContent="关"
+                        OnContent="开" />
+                </StackPanel>
+            </DockPanel>
+        </Grid>
+        <Grid Grid.Column="1" Background="#151a1b">
+            <UniformGrid
+                Margin="30"
+                Columns="3"
+                Rows="2">
+                <StackPanel Margin="0,0,10,10">
+                    <TextBlock
+                        FontFamily="微软雅黑"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="#bcbebf"
+                        Text="客厅" />
+                    <UniformGrid
+                        Margin="0,10,0,0"
+                        Columns="2"
+                        Rows="2">
+                        <controls:DeviceToggleButton
+                            Margin="0,0,5,5"
+                            DeviceName="主厅"
+                            DeviceType="灯光"
+                            DeviceValue="{Binding MainLight}"
+                            Icon="{DynamicResource Lighting}"
+                            IsChecked="{Binding MainLightIsChecked}">
+                            <ui:ProgressRing
+                                Width="32"
+                                Height="32"
+                                Foreground="#b6b6b6"
+                                Progress="{Binding DeviceValue, RelativeSource={RelativeSource AncestorType=controls:DeviceToggleButton}}"
+                                Visibility="{Binding DeviceValue, RelativeSource={RelativeSource AncestorType=controls:DeviceToggleButton}, Converter={StaticResource ProgressRingVisibilityConverter}}" />
+                        </controls:DeviceToggleButton>
+                        <controls:DeviceToggleButton
+                            Margin="5,0,0,5"
+                            DeviceName="氛围"
+                            DeviceType="灯光"
+                            Icon="{DynamicResource DeskLamp}"
+                            IsChecked="{Binding DeskLampIsChecked}" />
+                        <controls:DeviceToggleButton
+                            Margin="0,5,5,0"
+                            DeviceName="电视"
+                            DeviceType="媒体"
+                            Icon="{DynamicResource Tv}"
+                            IsChecked="{Binding TvIsChecked}" />
+                        <controls:DeviceToggleButton
+                            Margin="5,5,0,0"
+                            DeviceName="游戏机"
+                            DeviceType="媒体"
+                            Icon="{DynamicResource PS5}"
+                            IsChecked="{Binding PS5IsChecked}" />
+                    </UniformGrid>
+                </StackPanel>
+                <StackPanel Margin="10,0,10,10">
+                    <TextBlock
+                        FontFamily="微软雅黑"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="#bcbebf"
+                        Text="工作室" />
+                    <UniformGrid
+                        Margin="0,10,0,0"
+                        Columns="2"
+                        Rows="2">
+                        <controls:DeviceToggleButton
+                            Margin="0,0,5,5"
+                            DeviceName="工作"
+                            DeviceType="灯光"
+                            Icon="{DynamicResource Lighting}" />
+                        <controls:DeviceToggleButton
+                            Margin="5,0,0,5"
+                            DeviceName="射灯"
+                            DeviceType="灯光"
+                            Icon="{DynamicResource Spotlight}" />
+                        <controls:DeviceToggleButton
+                            Margin="0,5,5,0"
+                            DeviceName="电脑"
+                            DeviceType="媒体"
+                            Icon="{DynamicResource Computer}" />
+                        <controls:DeviceToggleButton
+                            Margin="5,5,0,0"
+                            DeviceName="音响"
+                            DeviceType="媒体"
+                            Icon="{DynamicResource Speaker}" />
+                    </UniformGrid>
+                </StackPanel>
+                <StackPanel Margin="10,0,0,10">
+                    <TextBlock
+                        FontFamily="微软雅黑"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="#bcbebf"
+                        Text="卧室" />
+                    <UniformGrid
+                        Margin="0,10,0,0"
+                        Columns="2"
+                        Rows="2">
+                        <controls:DeviceToggleButton
+                            Margin="0,0,5,5"
+                            DeviceName="Belysning"
+                            DeviceType="Pa"
+                            Icon="{DynamicResource BedsideLamp}" />
+                        <controls:DeviceToggleButton
+                            Margin="5,0,0,5"
+                            DeviceName="Belysning"
+                            DeviceType="Pa"
+                            Icon="{DynamicResource BedsideLamp}" />
+                        <controls:DeviceToggleButton
+                            Margin="0,5,5,0"
+                            DeviceName="风扇"
+                            DeviceType="家居"
+                            Icon="{DynamicResource Lighting}" />
+                        <controls:DeviceToggleButton
+                            Margin="5,5,0,0"
+                            DeviceName="电视"
+                            DeviceType="媒体"
+                            Icon="{DynamicResource Lighting}" />
+                    </UniformGrid>
+                </StackPanel>
+                <StackPanel Margin="0,10,10,0">
+                    <TextBlock
+                        FontFamily="微软雅黑"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="#bcbebf"
+                        Text="媒体" />
+                    <UniformGrid
+                        Margin="0,10,0,0"
+                        Columns="2"
+                        Rows="2">
+                        <controls:DeviceToggleButton
+                            Margin="0,0,5,5"
+                            DeviceName="Belysning"
+                            DeviceType="Pa"
+                            Icon="{DynamicResource Lighting}" />
+                        <controls:DeviceToggleButton
+                            Margin="5,0,0,5"
+                            DeviceName="Belysning"
+                            DeviceType="Pa"
+                            Icon="{DynamicResource Lighting}" />
+                        <controls:DeviceToggleButton
+                            Margin="0,5,5,0"
+                            DeviceName="Belysning"
+                            DeviceType="Pa"
+                            Icon="{DynamicResource Lighting}" />
+                        <controls:DeviceToggleButton
+                            Margin="5,5,0,0"
+                            DeviceName="Belysning"
+                            DeviceType="Pa"
+                            Icon="{DynamicResource Lighting}" />
+                    </UniformGrid>
+                </StackPanel>
+                <StackPanel Margin="10,10,10,0">
+                    <TextBlock
+                        FontFamily="微软雅黑"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="#bcbebf"
+                        Text="灯光" />
+                    <UniformGrid
+                        Margin="0,10,0,0"
+                        Columns="2"
+                        Rows="2">
+                        <controls:DeviceToggleButton
+                            Margin="0,0,5,5"
+                            DeviceName="卫生间"
+                            DeviceType="灯光"
+                            Icon="{DynamicResource Lighting}" />
+                        <controls:DeviceToggleButton
+                            Margin="5,0,0,5"
+                            DeviceName="厨房"
+                            DeviceType="灯光"
+                            Icon="{DynamicResource Lighting}" />
+                        <controls:DeviceToggleButton
+                            Margin="0,5,5,0"
+                            DeviceName="衣柜"
+                            DeviceType="灯光"
+                            Icon="{DynamicResource Lighting}" />
+                        <controls:DeviceToggleButton
+                            Margin="5,5,0,0"
+                            DeviceName="大厅"
+                            DeviceType="灯光"
+                            Icon="{DynamicResource Lighting}" />
+                    </UniformGrid>
+                </StackPanel>
+                <StackPanel Margin="10,10,0,0">
+                    <TextBlock
+                        FontFamily="微软雅黑"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="#bcbebf"
+                        Text="家" />
+                    <UniformGrid
+                        Margin="0,10,0,0"
+                        Columns="2"
+                        Rows="2">
+                        <controls:DeviceToggleButton
+                            Margin="0,0,5,5"
+                            DeviceName="温度计"
+                            DeviceType="家居"
+                            Icon="{DynamicResource Lighting}" />
+                        <controls:DeviceToggleButton
+                            Margin="5,0,0,5"
+                            DeviceName="插座能耗"
+                            DeviceType="家居"
+                            Icon="{DynamicResource Lighting}" />
+                        <controls:DeviceToggleButton
+                            Margin="0,5,5,0"
+                            DeviceName="Belysning"
+                            DeviceType="Pa"
+                            Icon="{DynamicResource Lighting}" />
+                        <controls:DeviceToggleButton
+                            Margin="5,5,0,0"
+                            DeviceName="Belysning"
+                            DeviceType="Pa"
+                            Icon="{DynamicResource Lighting}" />
+                    </UniformGrid>
+                </StackPanel>
+            </UniformGrid>
+        </Grid>
+    </Grid>
+</Window>
